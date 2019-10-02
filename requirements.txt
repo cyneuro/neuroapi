@@ -12,3 +12,6 @@ apispec[yaml]
 apispec-webframeworks
 tox
 webargs
+numpy
+pandas
+matplotlib

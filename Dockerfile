@@ -6,12 +6,13 @@
 # for celery: docker run --env-file=.flaskenv image celery worker -A myapi.celery_app:app
 #
 # note that celery will require a running broker and result backend
-FROM python:3.7
+FROM continuumio/anaconda:latest
 
 RUN mkdir /code
 WORKDIR /code
 
 COPY . /code/
+RUN conda install -c conda-forge neuron 
 RUN pip install -r requirements.txt
 RUN pip install -e .
 
