@@ -20,12 +20,14 @@ sudo docker-compose up -d
 git clone https://github.com/cyneuro/neuroapi.git
 cd neuroapi
 pip install -r requirements.txt
-python setup.py #develop
+python setup.py
+neuroapi init
 neuroapi run -h 0.0.0.0
 ```
 
 ### Authentication
 
+**THIS IS NOT CURRENTLY ENABLED FOR THE FUNCTIONS CALL** 
 
 To access protected resources, you will need an access token. You can generate 
 an access and a refresh token using `/auth/login` endpoint, example using curl
@@ -45,7 +47,7 @@ This will return something like this
 You can use access_token to access protected endpoints :
 
 ```bash
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwiaWRlbnRpdHkiOjEsImlhdCI6MTUxMDAwMDQ0MSwiZnJlc2giOmZhbHNlLCJqdGkiOiI2OTg0MjZiYi00ZjJjLTQ5MWItYjE5YS0zZTEzYjU3MzFhMTYiLCJuYmYiOjE1MTAwMDA0NDEsImV4cCI6MTUxMDAwMTM0MX0.P-USaEIs35CSVKyEow5UeXWzTQTrrPS_YjVsltqi7N4" http://127.0.0.1:5000/api/v1/users
+curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzAwMzg2MzgsIm5iZiI6MTU3MDAzODYzOCwianRpIjoiNTQ3NTkwMWUtMWFiMC00ZDI1LWI4YjktZWYzMTc2OGFhN2YwIiwiZXhwIjoxNTcwMDM5NTM4LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.p8JB2hKutnbDXqfiGvK2gsyN6ENxLD0e1MBMag28RUQ" http://127.0.0.1:5000/api/v1/users
 ```
 
 You can use refresh token to retreive a new access_token using the endpoint `/auth/refresh`
@@ -62,6 +64,27 @@ this will only return a new access token
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwiaWRlbnRpdHkiOjEsImlhdCI6MTUxMDAwMDYxOCwiZnJlc2giOmZhbHNlLCJqdGkiOiIzODcxMzg4Ni0zNGJjLTRhOWQtYmFlYS04MmZiNmQwZjEyNjAiLCJuYmYiOjE1MTAwMDA2MTgsImV4cCI6MTUxMDAwMTUxOH0.cHuNf-GxVFJnUZ_k9ycoMMb-zvZ10Y4qbrW8WkXdlpw"
 }
 ```
+
+### Calling Functions
+
+
+**With authentication** - After obtaining your access token, "POST" or "GET" a request from the `/functions` location:
+
+```
+curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzAwMzg2MzgsIm5iZiI6MTU3MDAzODYzOCwianRpIjoiNTQ3NTkwMWUtMWFiMC00ZDI1LWI4YjktZWYzMTc2OGFhN2YwIiwiZXhwIjoxNTcwMDM5NTM4LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.p8JB2hKutnbDXqfiGvK2gsyN6ENxLD0e1MBMag28RUQ" "http://127.0.0.1:5000/api/v1/function" --data '{"function":"a","params":{"a":"b"}}'
+```
+
+Notice the use of the required `function` and `params` parameters.
+
+**Without authentication** , requests look like this:
+
+```
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/api/v1/function" --data '{"function":"return_params","params":{"params":{"a":33431}}}'
+```
+
+### Available functions and return values
+
+To be determined. Any function placed in `neuroapi.neuro.core.py` will be accessible from the public API.
 
 ### Running tests
 

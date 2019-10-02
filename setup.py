@@ -19,6 +19,7 @@ setup(
         'passlib',
         'apispec[yaml]',
         'apispec-webframeworks',
+        'webargs'
     ],
     entry_points={
         'console_scripts': [
