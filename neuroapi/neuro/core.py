@@ -1,16 +1,19 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import shutil
 import os
+from io import BytesIO
+import base64
 
-def load_neuron():
-    from neuron import h
-    h.load_file('stdrun.hoc')
+import neuron
+from neuron import h
+h.load_file('stdrun.hoc')
 
-def build_cell(diam,cm,el,gl,gna,gh,gk,tstop,dur,amp,mhalf,hhalf,mk,hk,nhalf,kn,multiply,multiply1,multiply2,seg1,seg2,seg3):
-    load_neuron()
-    
+def run_cell(diam,cm,el,gl,gna,gh,gk,tstop,dur,amp,mhalf,hhalf,mk,hk,nhalf,kn,multiply,multiply1,multiply2,seg1,seg2,seg3):
+    #Load the mechanisms in the current directory
+    neuron.load_mechanisms(os.path.dirname(os.path.abspath(__file__)))
+
+    Passive = [1,-1,-65]
     soma = h.Section(name='soma')
     soma.L = 100 # um
     soma.insert('hh')
@@ -71,7 +74,71 @@ def build_cell(diam,cm,el,gl,gna,gh,gk,tstop,dur,amp,mhalf,hhalf,mk,hk,nhalf,kn,
     nc.threshold = 0
     spvec = h.Vector()
     nc.record(spvec)
+    if Source.amp < 0:
+        h.run()
+        print('number of spikes:',len(spvec))
+        
+        R_in_1 = 1/(soma.gl_hh*1000)
+        tau_1 = soma.cm*R_in_1
+        V_rest_1 = v0_vec[int(tstop)-20]
+        
+        R_in_2 = Passive[1]
+        tau_2 = Passive[0]
+        V_rest_2 = Passive[2]
+    
+        df1 = pd.DataFrame([[tau_1],[V_rest_1],[R_in_1],[tau_2],[V_rest_2],[R_in_2]],
+        columns=['value  '],
+        index = ['tau_seg  ', 'Vrest_seg  ', 'Rin_seg  ','tau_ori  ', 'Vrest_ori  ', 'Rin_ori  '])
+        print (df1)
+        plt.figure(figsize=(10,6))
+        plt.plot(t_vec, v0_vec,'b')
+        plt.xlim(0, tstop)
+        plt.ylabel('mV')
+    
+    frequency =["all"]
+    amplitude =["all"]  
+    # FIR Curve
 
+    freq1 = []
+    I1 = []
+    freq2 = []
+    I2 = []
+    if (Source.amp > 0):
+        for Source.amp in np.arange(amp,amp+1,0.1):
+            h.run()
+            freq1.append(len(spvec)*1000/Source.dur)
+            I1.append(Source.amp)
+        plt.figure(figsize=(16,14))
+        plt.subplot(4,1,1)
+        plt.plot(t_vec, v0_vec,'b')
+        plt.xlim(0, tstop)
+        plt.ylabel('mV')
+        plt.subplot(4,1,2)
+        plt.plot(amplitude,frequency,'bo')
+        plt.plot(I1,freq1,'yo')
+        #plt.legend([soma.flag_k1,1-soma.flag_k1])
+        plt.xlabel('Injected current (nA)')
+        plt.ylabel('frequency') 
+        plt.subplot(4,1,3)
+        plt.plot(v0_vec, m_na,'r.')
+        plt.plot(v0_vec, h_hd,'b.')
+        plt.plot(v0_vec, n_k, 'g.')
+        #plt.xlim(0, tstop)
+        plt.xlabel('voltage (mV)')
+        plt.ylabel('Probability')
+        plt.legend(['minf','hinf','ninf'])
+        plt.subplot(4,1,4)
+        plt.plot(v0_vec, tau_m,'r.')
+        plt.plot(v0_vec, tau_h,'b.')
+        plt.plot(v0_vec, tau_n, 'g.')
+        plt.xlabel('voltage (mV)')
+        plt.ylabel('tau')
+        plt.legend(['minf','hinf','ninf'])
+    image = BytesIO()
+    #plt.show()
+    plt.savefig(image, format='png')
+    ret = base64.b64encode(image.getvalue())
+    return str(ret)
 
 
 #Just a testing platform

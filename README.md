@@ -86,7 +86,26 @@ curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/api/v1/fu
 
 ### Available functions and return values
 
-To be determined. Any function placed in `neuroapi.neuro.core.py` will be accessible from the public API.
+Any function placed in `neuroapi.neuro.core.py` will be accessible from the public API.
+
+#### run_cell
+
+Roughly 21 values supplied (see below), returns base64 encoded image text containing plots
+
+```
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/api/v1/function" --data '{"function":"run_cell","params":{"el":-70,"diam":200,"cm":1,"gl":30,"gna":120,"gh":10,"gk":12,"tstop":500,"dur":[100,400],"amp":0.1,"mhalf":-38.43,"hhalf":7.2,"mk":7.2,"hk":-8,"nhalf":-81,"kn":11,"multiply":1,"multiply1":1,"multiply2":1,"seg1":-60,"seg2":-61,"seg3":-62.5}}'
+```
+
+Return:
+
+```
+Tyler@DESKTOP MINGW64 ~/Desktop/git_stage
+$ curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/api/v1/                   function" --data '{"function":"run_cell","params":{"el":-70,"diam":200,"cm":1,"g                   l":30,"gna":120,"gh":10,"gk":12,"tstop":500,"dur":[100,400],"amp":0.1,"mhalf":-3                   8.43,"hhalf":7.2,"mk":7.2,"hk":-8,"nhalf":-81,"kn":11,"multiply":1,"multiply1":1                   ,"multiply2":1,"seg1":-60,"seg2":-61,"seg3":-62.5}}'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   273    0     0  100   273      0    169  0:00:01  0:00:01 --:--:--   169{
+    "result": "b'iVBORw0KGgoAAAANSUhEUgAABkAAAAV4CAYAAAD4zRH6AAAABHNCSVQICAgIfAh                   kiAAAAAlwSFlzAAAPYQAAD2EBqD+naQAAADl0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uIDI                   uMi4zLCBodHRwOi8vbWF0cGxvdGxpYi5vcmcvIxREBQAAIABJREFUeJzs3X9wXXWdN/BPfjRJ201iS7B                   YGyio6y4WV2x3GJAVumCBUXkYXX48sDx2BhiRgjKBcaaoIzJiZ6RU1
+```
 
 ### Running tests
 
