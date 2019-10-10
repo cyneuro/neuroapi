@@ -4,7 +4,7 @@ services:
   web:
     image: neuroapi
     build: .
-    command: neuroapi run -h 0.0.0.0
+    command: "/bin/bash -l -c 'cd /code/neuroapi/neuro && neuroapi run -h 0.0.0.0'"
     env_file:
       - ./.flaskenv
     environment:
