@@ -22,7 +22,7 @@ You will need to have NEURON installed and accessible by python for some of the 
 git clone https://github.com/cyneuro/neuroapi.git
 cd neuroapi
 pip install -r requirements.txt
-python setup.py
+python setup.py develop
 neuroapi init
 neuroapi run -h 0.0.0.0
 ```
