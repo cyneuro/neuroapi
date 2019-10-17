@@ -16,10 +16,28 @@ sudo docker-compose up -d
 
 ### Manual Start
 
-You will need to have NEURON installed and accessible by python for some of the functions.
+Obtaining the code:
 
 ```
 git clone https://github.com/cyneuro/neuroapi.git
+cd neuroapi
+```
+
+If you don't have neuron or anaconda installed use the scripts located in the `nrn_install` folder.
+In the following example `ubuntu` is the user account. You MUST specify the full path of the install directory. `TODO: realpath`
+
+```
+cd neuroapi/nrn_install
+mkdir /home/ubuntu/apps
+./ubuntu_requirements.sh
+./easy-conda-install.sh /home/ubuntu/apps
+./easy-nrn-install.sh /home/ubuntu/apps
+
+```
+
+You will need to have NEURON installed and accessible by python for some of the functions.
+
+```
 cd neuroapi
 pip install -r requirements.txt
 python setup.py develop
