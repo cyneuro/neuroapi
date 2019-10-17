@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('pdf') #https://stackoverflow.com/questions/19518352/tkinter-tclerror-couldnt-connect-to-display-localhost18-0
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
