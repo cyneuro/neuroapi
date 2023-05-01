@@ -1,5 +1,5 @@
 marshmallow<3
-flask==1.0
+flask==2.3.2
 flask-restful
 flask-migrate
 flask-sqlalchemy
